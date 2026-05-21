@@ -535,23 +535,23 @@ window.addEventListener('scroll', () => {
     for (let x = 0; x < COLS; x++)
       if (Math.random() < 0.08) bgDots.push({x, y, p: Math.random() * 6.28});
 
-  // Three structures the agent will discover
+  // Three disease modules the agent will reason about
   const clusters = [
-    { // Square molecule
+    { // Regulatory cycle (feedback loop)
       cx:14, cy:7,
-      nodes:[{dx:-1,dy:-1,c:'◎'},{dx:1,dy:-1,c:'∿'},{dx:-1,dy:1,c:'△'},{dx:1,dy:1,c:'⬡'}],
+      nodes:[{dx:-1,dy:-1,c:'◎'},{dx:1,dy:-1,c:'◉'},{dx:-1,dy:1,c:'▽'},{dx:1,dy:1,c:'⬡'}],
       edges:[{dx:0,dy:-1,c:'─'},{dx:0,dy:1,c:'─'},{dx:-1,dy:0,c:'│'},{dx:1,dy:0,c:'│'}],
       bad:{dx:0,dy:0,c:'╳'}, state:'hidden', t:0
     },
-    { // Linear chain
+    { // Signaling cascade (receptor → kinase → TF)
       cx:30, cy:7,
-      nodes:[{dx:-3,dy:0,c:'∿'},{dx:-1,dy:0,c:'◯'},{dx:1,dy:0,c:'◎'},{dx:3,dy:0,c:'△'}],
+      nodes:[{dx:-3,dy:0,c:'▽'},{dx:-1,dy:0,c:'◉'},{dx:1,dy:0,c:'◎'},{dx:3,dy:0,c:'⬡'}],
       edges:[{dx:-2,dy:0,c:'─'},{dx:0,dy:0,c:'─'},{dx:2,dy:0,c:'─'}],
       bad:{dx:0,dy:1,c:'│'}, state:'hidden', t:0
     },
-    { // Cross network
+    { // Cell-cell crosstalk (hub motif)
       cx:46, cy:7,
-      nodes:[{dx:0,dy:-2,c:'◉'},{dx:-2,dy:0,c:'◎'},{dx:2,dy:0,c:'△'},{dx:0,dy:2,c:'⬡'}],
+      nodes:[{dx:0,dy:-2,c:'◉'},{dx:-2,dy:0,c:'◎'},{dx:2,dy:0,c:'◯'},{dx:0,dy:2,c:'⬡'}],
       edges:[{dx:0,dy:-1,c:'│'},{dx:-1,dy:0,c:'─'},{dx:1,dy:0,c:'─'},{dx:0,dy:1,c:'│'},{dx:0,dy:0,c:'┼'}],
       bad:{dx:1,dy:-1,c:'╲'}, state:'hidden', t:0
     }
@@ -734,11 +734,11 @@ window.addEventListener('scroll', () => {
       const t = Math.min(pf / ph.dur, 1);
       let label, labelCol;
       if (ph.type === 'model' && t >= .2 && t < .32) {
-        label = '✗ failed'; labelCol = COL.fail;
+        label = '✗ off-target'; labelCol = COL.fail;
       } else if (ph.type === 'model' && t >= .32 && t < .55) {
-        label = 're-adjusting...'; labelCol = COL.unknown;
+        label = 'revising prior...'; labelCol = COL.unknown;
       } else {
-        label = {perceive:'perceiving...', model:'modeling...', commit:'committed ✓'}[ph.type];
+        label = {perceive:'observing...', model:'hypothesizing...', commit:'validated ✓'}[ph.type];
         labelCol = COL.label;
       }
       ctx.globalAlpha = Math.min(.7, pf / 15 * .7);
